@@ -1,3 +1,4 @@
+from ast import match_case
 from os import system, name
 from textwrap import wrap
 
@@ -41,29 +42,23 @@ class WordleHelper():
 
     def __get_choice(self) -> None:
         choice = self.__input_int_range("Enter choice: ", 1, 8)
-        if choice == 1:
-            self.__add_to_list(self.__invalid_letters, "invalid letters")
-            return
-        if choice == 2:
-            self.__remove_from_list(self.__invalid_letters, "invalid letters")
-            return
-        if choice == 3:
-            self.__add_to_list(self.__valid_letters, "valid letters")
-            return
-        if choice == 4:
-            self.__remove_from_list(self.__valid_letters, "valid letters")
-            return
-        if choice == 5:
-            self.__add_known_letters()
-            return
-        if choice == 6:
-            self.__get_potential_words()
-            return
-        if choice == 7:
-            self.__reset_lists()
-            return
-        if choice == 8:
-            exit()
+        match choice:
+            case 1:
+                self.__add_to_list(self.__invalid_letters, "invalid letters")
+            case 2:
+                self.__remove_from_list(self.__invalid_letters, "invalid letters")
+            case 3:
+                self.__add_to_list(self.__valid_letters, "valid letters")
+            case 4:
+                self.__remove_from_list(self.__valid_letters, "valid letters")
+            case 5:
+                self.__add_known_letters()
+            case 6:
+                self.__get_potential_words()
+            case 7:
+                self.__reset_lists()
+            case 8:
+                exit()
 
     def __clear_console(self) -> None:
         if name == 'nt':
