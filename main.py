@@ -10,6 +10,7 @@ class WordleHelper():
     __low_probability: list
     __mid_probability: list
     __high_probability: list
+    __number_of_words: int
 
     def __init__(self) -> None:
         self.__all_words = self.__get_all_words()
@@ -27,8 +28,8 @@ class WordleHelper():
 
     def __show_options(self) -> None:
         self.__clear_console()
-        self.__show_letters(self.__invalid_letters, "Invalid letters:")
-        self.__show_letters(self.__valid_letters, "Valid letters:")
+        self.__show_results(self.__invalid_letters, "Invalid letters:")
+        self.__show_results(self.__valid_letters, "Valid letters:")
         self.__show_known_letters()
         print("1. Add invalid letters")
         print("2. Remove invalid letters\n")
@@ -67,7 +68,9 @@ class WordleHelper():
 
     def __get_all_words(self) -> list:
         with open("wordle_words.txt") as file:
-            return file.read().splitlines()
+            words = file.read().splitlines()
+            self.__number_of_words = len(words)
+            return words
 
     def __init_known_letters(self) -> None:
         starting_knowns = []
@@ -85,7 +88,7 @@ class WordleHelper():
             if char in list_to_remove:
                 list_to_remove.remove(char)
 
-    def __show_letters(self, letters_list: list, message: str) -> None:
+    def __show_results(self, letters_list: list, message: str) -> None:
         print(message)
         if len(letters_list) != 0:
             for letter in letters_list:
@@ -164,14 +167,25 @@ class WordleHelper():
 
     def __show_potential_words(self) -> None:
         if len(self.__high_probability) > 0:
-            self.__show_letters(self.__high_probability, "High probability:")
+            print(f"Results: {self.__calculate_words(self.__high_probability)}")
+            self.__show_results(self.__high_probability, "High probability:")
             return
         if len(self.__mid_probability) > 0:
-            self.__show_letters(self.__mid_probability, "Mid probability:")
+            print(f"Results: {self.__calculate_words(self.__mid_probability)}")
+            self.__show_results(self.__mid_probability, "Mid probability:")
             return
         if len(self.__low_probability) > 0:
-            self.__show_letters(self.__low_probability, "Low probability:")
+            print(f"Results: {self.__calculate_words(self.__low_probability)}")
+            self.__show_results(self.__low_probability, "Low probability:")
             return
+
+    def __calculate_words(self, results: list) -> None:
+        amount = f"{len(results)} potential words"
+        percent = 100 - (len(results) / self.__number_of_words * 100)
+        # percent_reduced = (len(results) / self.__number_of_words)
+        # print(percent_reduced)
+        return f"{amount} | {round(percent, 2)}% of words eliminated"
+        # return ""
 
     def __reset_lists(self) -> None:
         self.__invalid_letters = []
