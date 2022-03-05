@@ -1,4 +1,3 @@
-from ast import match_case
 from os import system, name
 from textwrap import wrap
 
@@ -67,7 +66,7 @@ class WordleHelper():
             system('clear')
 
     def __get_all_words(self) -> list:
-        with open("words.txt") as file:
+        with open("wordle_words.txt") as file:
             return file.read().splitlines()
 
     def __init_known_letters(self) -> None:
@@ -94,6 +93,7 @@ class WordleHelper():
         print("\n")
 
     def __get_potential_words(self) -> None:
+        self.__clear_console()
         self.__low_probability.clear()
         for word in self.__all_words:
             temp = any(char in self.__invalid_letters for char in word)
@@ -176,7 +176,7 @@ class WordleHelper():
     def __reset_lists(self) -> None:
         self.__invalid_letters = []
         self.__valid_letters = []
-        self.__known_letters = []
+        self.__known_letters = self.__init_known_letters()
 
     def __input_int_range(self, message: str, min: int, max: int) -> int:
         while True:
